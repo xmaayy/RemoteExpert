@@ -1,0 +1,19 @@
+{
+  "name": "fourth-year-electron-client",
+  "version": "0.1.0",
+  "description": "Simplest implementation of WebRTC",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "electron": "electron main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^11.0.3",
+    "express": "^4.16.4",
+    "socket.io": "^2.2.0"
+  }
+}
