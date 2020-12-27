@@ -13,12 +13,16 @@ const SDP_TYPE = {
     // ANSWER the response to the offer (usually performed by the )
     ANSWER: 2,
     // CANDIDATE messages sending possible ICE candidates
-    CANDIDATE: 4,
+    CANDIDATE: 3,
 }
+
+const iceSeparatorCharacter = "|"
 
 // The client polls the signalling server to receive new offers, answers, and candidates left for its id
 // pollInterval determines how frequently the server should be polled
-const pollInterval = 5000;
+const pollInterval = 100;
+
+
 
 var divOffers = document.getElementById("connect");
 var divConsultingRoom = document.getElementById("consultingRoom");
@@ -166,7 +170,7 @@ var poll = () => {
                         handleAnswer(res.data.Data)
                         break
                     case SDP_TYPE.CANDIDATE:
-                        handleCandidate(res.data.Data)
+                        handleCandidate(res.data.Data, res.data.IceDataSeparator)
                         break
                     default: 
                         break
@@ -192,10 +196,13 @@ var handleAnswer = (sdp) => {
     });
 }
 
-var handleCandidate = (data) => {
+var handleCandidate = (data, separatorChar) => {
+    console.log('Handling Ice Candidate')
+    const ice = data.split(separatorChar);
     var candidate = new RTCIceCandidate({
-        sdpMLineIndex: data.label,
-        candidate: data.candidate
+        sdpMid: ice[2],
+        sdpMLineIndex: ice[1],
+        candidate: ice[0]
     });
     rtcPeerConnection.addIceCandidate(candidate);
 }
@@ -206,17 +213,18 @@ function onIceCandidate(event) {
         console.log('Sending ice candidate');
         axios.post(inputUri.value + '/data/' + peerId, {
             MessageType: SDP_TYPE.CANDIDATE,
-            Data: {
-                label: event.candidate.sdpMLineIndex,
-                id: event.candidate.sdpMID,
-                candidate: event.candidate.candidate,
-            }
+            Data: 
+                [event.candidate.candidate,
+                event.candidate.sdpMLineIndex,
+                event.candidate.sdpMid].join(iceSeparatorCharacter),
+            IceDataSeparator: "|"
         })
     }
 }
 
 function onAddStream(event) {
     console.log('Adding stream')
+    debugger;
     remoteVideo.srcObject = event.streams[0];
     remoteStream = event.stream;
 }
