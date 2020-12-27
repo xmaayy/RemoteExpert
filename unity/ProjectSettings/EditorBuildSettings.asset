@@ -4,5 +4,12 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
-  m_configObjects: {}
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/VideoChatDemo.unity
+    guid: feed99ae0a5fc914883b24ee78abf9d6
+  m_configObjects:
+    Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: cdf99d3fd47d75e4cb4f034ba233b340,
+      type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: fc1bc73dc36263c4d8609d2fe9d4c5a8,
+      type: 2}
