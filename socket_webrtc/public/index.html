@@ -6,14 +6,20 @@
     <h1>Remote Expert</h1>
 
     <div id="connect">
-        <label>Type the room number</label>
         <label>Input your id</label>
         <input id="myId" type="text" />
+        <br/>
         <label>Input peer id</label>
         <input id="peerId" type="text" />
+        <br/>
+        <label>Two way videochat?</label>
+        <input id="twoWayVideo" type="checkbox" />
+        <br/>
         <label>Input signalling server url</label>
         <input id="signallingServerUrl" type="text" value="http://localhost:3000"/>
+        <br/>
         <button id="createOffer">Send Offer</button>
+        <br/>
         <button id="pollOffers">Poll Offers</button>
     </div>
 
@@ -22,7 +28,7 @@
         <video id="remoteVideo" autoplay></video>
     </div>
 
-   <script src="http://localhost:3001/socket.io/socket.io.js"></script>
+   <script>var exports = {};</script>>
    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
    <script src="./dssclient.js"></script>
 </body>
