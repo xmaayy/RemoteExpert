@@ -5,7 +5,7 @@ is the non-caller here. the caller in this code will attempt to broadcast its si
 to the hololens, whereas the non-caller will only listen. keep this in mind while
 you're reading the code
 */
-import axios from 'axios';
+import * as communication from './communication';
 
 // The Hololens application uses Enum values corresponding to integers to represent the sdp message types
 const SDP_TYPE = {
@@ -42,8 +42,11 @@ const btnCreateOffer = (<HTMLButtonElement>window.document.getElementById("creat
 
 const localVideo = (<HTMLMediaElement>window.document.getElementById("localVideo"));
 const remoteVideo = (<HTMLMediaElement>window.document.getElementById("remoteVideo"));
-// TODO remove these two variables below
+// TODO remove these three variables below
 var exitPoll = false;
+var encrypt = true;
+var key = 'This is a bad secret key';
+
 
 // variables
 // needed some defaults
@@ -81,7 +84,7 @@ btnPollOffers.onclick = () => {
     } else if (inputMyId.value === '') {
         alert("please input your id")
     } else {
-        if(inputTwoWayVideo.value){
+        if(inputTwoWayVideo.checked){
             initializeLocalVideoStream(iceServers).then((rtcPeerConnection: RTCPeerConnection) => {
                 divOffers.style.display = "none";
                 divConsultingRoom.style.display = "block";
@@ -133,10 +136,13 @@ const offer = function(rtcPeerConnection: RTCPeerConnection): Promise<void> {
                 // from the broadcaster side we can send the offer to the stuni
                 // server (local) for rebroadcasting to the room
                 rtcPeerConnection.setLocalDescription(sessionDescription);
-                axios.post(inputUri.value+'/data/'+ inputPeerId.value, {
-                    MessageType: SDP_TYPE.OFFER,
-                    Data: sessionDescription.sdp
-                }).then((res) => {
+
+                const data = {
+                    MessageType: SDP_TYPE.ANSWER,
+                    Data: sessionDescription.sdp,
+                }
+
+                communication.post(inputUri.value+'/data/'+ inputPeerId.value, data, encrypt, key).then((res) => {
                     resolve();
                 }).catch((err) => {
                     console.log('Could not send offer')
@@ -162,10 +168,15 @@ const handleOffer = function(sdp: string, rtcPeerConnection: RTCPeerConnection, 
                     // once we've created a session description without any media tracks
                     // send the answer back through the socket
                     rtcPeerConnection.setLocalDescription(sessionDescription);
-                    axios.post(uri+'/data/'+peerId, {
+
+                    const data = {
                         MessageType: SDP_TYPE.ANSWER,
                         Data: sessionDescription.sdp,
-                    }).then((response) => {
+                    }
+
+                    communication.post(uri+'/data/'+peerId,
+                        data, encrypt, key
+                    ).then((response) => {
                         resolve()
                     }).catch(err => {reject(err)})
                 .catch(error => {
@@ -180,19 +191,23 @@ const handleOffer = function(sdp: string, rtcPeerConnection: RTCPeerConnection, 
 // This is the main event loop polling the signalling server for incoming connections
 const poll = (rtcPeerConnection: RTCPeerConnection, uri: string, myId: string, exitPoll: boolean) => {
     setTimeout(() => {
-        axios.get(inputUri.value+'/data/'+inputMyId.value).then((res) => {
-                switch(res.data.MessageType){
-                    case SDP_TYPE.OFFER:
-                        handleOffer(res.data.Data, rtcPeerConnection, inputUri.value, inputPeerId.value)
-                        break
-                    case SDP_TYPE.ANSWER:
-                        handleAnswer(res.data.Data, rtcPeerConnection)
-                        break
-                    case SDP_TYPE.CANDIDATE:
-                        handleCandidate(res.data.Data, rtcPeerConnection, res.data.IceDataSeparator)
-                        break
-                    default: 
-                        break
+
+        communication.get(inputUri.value+'/data/'+inputMyId.value, encrypt, key).then((res) => {
+
+            const data = res.data;
+
+            switch(data.MessageType){
+                case SDP_TYPE.OFFER:
+                    handleOffer(data.Data, rtcPeerConnection, inputUri.value, inputPeerId.value)
+                    break
+                case SDP_TYPE.ANSWER:
+                    handleAnswer(data.Data, rtcPeerConnection)
+                    break
+                case SDP_TYPE.CANDIDATE:
+                    handleCandidate(data.Data, rtcPeerConnection, data.IceDataSeparator)
+                    break
+                default: 
+                    break
             }
         }).catch((err) => {
             // If the request is sent, and the server responds with a failure request
@@ -227,14 +242,19 @@ var handleCandidate = (data: string, rtcPeerConnection: RTCPeerConnection, separ
 function onIceCandidate(event) {
     if (event.candidate) {
         console.log('Sending ice candidate');
-        axios.post(inputUri.value + '/data/' + inputPeerId.value, {
+
+        const data = {
             MessageType: SDP_TYPE.CANDIDATE,
             Data: 
                 [event.candidate.candidate,
                 event.candidate.sdpMLineIndex,
                 event.candidate.sdpMid].join(ICE_SEPARATOR_CHAR),
             IceDataSeparator: ICE_SEPARATOR_CHAR
-        })
+        }
+
+        communication.post(inputUri.value + '/data/' + inputPeerId.value,
+            data, encrypt, key
+        )
     }
 }
 
