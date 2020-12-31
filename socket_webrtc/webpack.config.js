@@ -1,18 +1,22 @@
-module.exports = [
-  {
-    mode: 'development',
+const path = require('path');
+
+module.exports = {
     entry: './src/dssclient.ts',
-    target: 'web',
+   devtool: 'source-map',
     module: {
-      rules: [{
-        test: /\.ts$/,
-        include: /src/,
-        use: [{ loader: 'ts-loader' }]
-      }]
+      rules: [
+        {
+          test: /\.tsx?$/,
+          use: 'ts-loader',
+          exclude: /node_modules/,
+        },
+      ],
+    },
+    resolve: {
+      extensions: [ '.tsx', '.ts', '.js' ],
     },
     output: {
-      path: __dirname + '/public',
-      filename: 'dssclient.js'
-    }
-  }
-];
+      filename: 'dssclient.js',
+      path: path.resolve(__dirname, 'public'),
+    },
+  };
