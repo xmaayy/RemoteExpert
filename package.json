@@ -1,0 +1,12 @@
+{
+  "name": "fourth-year-electron-monorepo",
+  "version": "0.1.0",
+  "description": "Remote Expert is a communication system between the Microsoft Hololens, and an electron desktop application designed to help a supervisor communicate with a technician in the field",
+  "main": "server.js",
+  "scripts": {
+    "start": "npm run build --prefix socket_webrtc && concurrently \"npm start --prefix node-dss-master\" \"npm run electron:nobuild --prefix socket_webrtc\" \"npm run electron:nobuild --prefix socket_webrtc\""
+  },
+  "devDependencies": {
+    "concurrently": "^5.3.0"
+  }
+}
