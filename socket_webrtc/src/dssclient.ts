@@ -43,9 +43,10 @@ const btnCreateOffer = (<HTMLButtonElement>window.document.getElementById("creat
 
 const localVideo = (<HTMLMediaElement>window.document.getElementById("localVideo"));
 const remoteVideo = (<HTMLMediaElement>window.document.getElementById("remoteVideo"));
+var remoteVideoSource: MediaStream;
 // TODO remove these two variables below
 var exitPoll = false;
-var encryption = true;
+var encryption = false;
 var key = 'This is a test key'
 
 // variables
@@ -182,6 +183,10 @@ const handleOffer = function(sdp: string, rtcPeerConnection: RTCPeerConnection, 
     })})
 }
 
+var handleAnswer = (sdp: string, rtcPeerConnection: RTCPeerConnection): Promise<void> => {
+    return rtcPeerConnection.setRemoteDescription(new RTCSessionDescription({sdp: sdp, type: 'answer'}))
+}
+
 // This is the main event loop polling the signalling server for incoming connections
 const poll = (rtcPeerConnection: RTCPeerConnection, uri: string, myId: string, exitPoll: boolean) => {
     setTimeout(() => {
@@ -214,19 +219,18 @@ const poll = (rtcPeerConnection: RTCPeerConnection, uri: string, myId: string, e
     }, pollInterval)
 }
 
-var handleAnswer = (sdp: string, rtcPeerConnection: RTCPeerConnection): Promise<void> => {
-    return rtcPeerConnection.setRemoteDescription(new RTCSessionDescription({sdp: sdp, type: 'answer'}))
-}
-
 var handleCandidate = (data: string, rtcPeerConnection: RTCPeerConnection, separatorChar: string) => {
-    console.log('Handling Ice Candidate')
     const ice = data.split(separatorChar);
+    console.log('Handling Ice Candidate', ice)
     var candidate = new RTCIceCandidate({
         sdpMid: ice[2],
         sdpMLineIndex: parseInt(ice[1]),
         candidate: ice[0]
     });
-    return rtcPeerConnection.addIceCandidate(candidate);
+    rtcPeerConnection.addIceCandidate(candidate).then(() => {
+        console.log('Added Ice Candidate', rtcPeerConnection);
+        return rtcPeerConnection;
+    })
 }
 
 // handler functions
@@ -246,6 +250,14 @@ function onIceCandidate(event) {
 }
 
 function onAddStream(event) {
-    console.log('Adding stream')
-    remoteVideo.srcObject = event.streams[0];
+    console.log('Adding stream', event)
+    // remoteVideo.srcObject = event.streams[0];
+    if (remoteVideo.srcObject) {
+        remoteVideoSource.addTrack(event.track);
+        remoteVideo.srcObject = remoteVideoSource;
+    } else {
+        console.log('constructing mediastream')
+        remoteVideoSource = new MediaStream([event.track]);
+        remoteVideo.srcObject = remoteVideoSource;
+    }
 }
