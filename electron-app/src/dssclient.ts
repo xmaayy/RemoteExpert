@@ -46,7 +46,7 @@ const remoteVideo = (<HTMLMediaElement>window.document.getElementById("remoteVid
 var remoteVideoSource: MediaStream;
 // TODO remove these two variables below
 var exitPoll = false;
-var encryption = false;
+var encryption = true;
 var key = 'This is a test key'
 
 // variables

@@ -21,10 +21,10 @@ export const get = (uri, decryption: boolean = false, key: string = ''): Promise
         axios.get(uri).then((response) => {
             const rawData = response.data;
             if(decryption) {
-                const data = decrypt(rawData['cipher'], key)
+                const cipher = decrypt(rawData['cipher'], key)
                 const hmac = rawData['hmac'];
-                if (verify(response.data, hmac, key)){
-                    response.data = data;
+                if (verify(cipher, hmac, key)){
+                    response.data = cipher;
                 } else {
                     reject('HMAC did not match');
                 }
