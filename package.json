@@ -1,0 +1,13 @@
+{
+  "name": "fourth-year-electron-monorepo",
+  "version": "0.1.0",
+  "description": "Remote Expert is a communication system between the Microsoft Hololens, and an electron desktop application designed to help a supervisor communicate with a technician in the field",
+  "main": "server.js",
+  "scripts": {
+    "start": " npm run build --prefix electron-app && concurrently  \"npm run build:watch --prefix electron-app\" \"npm start --prefix node-dss-master\" \"npm run electron:nobuild --prefix electron-app\" \"npm run electron:nobuild --prefix electron-app\"",
+    "install:all": "npm install && npm install --prefix electron-app && npm install --prefix node-dss-master"
+  },
+  "devDependencies": {
+    "concurrently": "^5.3.0"
+  }
+}
