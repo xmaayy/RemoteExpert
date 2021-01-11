@@ -42,6 +42,7 @@ const btnPollOffers = (<HTMLButtonElement>window.document.getElementById("pollOf
 const btnCreateOffer = (<HTMLButtonElement>window.document.getElementById("createOffer"));
 
 const localVideo = (<HTMLMediaElement>window.document.getElementById("localVideo"));
+localVideo.muted = true;
 const remoteVideo = (<HTMLMediaElement>window.document.getElementById("remoteVideo"));
 var remoteVideoSource: MediaStream;
 // TODO remove these two variables below
