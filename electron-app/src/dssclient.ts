@@ -86,6 +86,7 @@ document.getElementById("mySVG")!.appendChild(svgElement);
 var exitPoll = false;
 var encryption = true;
 var key = 'This is a test key'
+var iv = 'This is a test IV'
 
 // variables
 // needed some defaults
@@ -197,7 +198,7 @@ const offer = function(rtcPeerConnection: RTCPeerConnection): Promise<void> {
                 communication.post(inputUri.value+'/data/'+ inputPeerId.value, {
                     MessageType: SDP_TYPE.OFFER,
                     Data: sessionDescription.sdp
-                }, encryption, key).then((res) => {
+                }, encryption, key, iv).then((res) => {
                     resolve();
                 }).catch((err) => {
                     console.log('Could not send offer')
@@ -227,7 +228,7 @@ const handleOffer = function(sdp: string, rtcPeerConnection: RTCPeerConnection, 
                     communication.post(uri+'/data/'+peerId, {
                         MessageType: SDP_TYPE.ANSWER,
                         Data: sessionDescription.sdp,
-                    }, encryption, key).then((response) => {
+                    }, encryption, key, iv).then((response) => {
                         resolve()
                     }).catch(err => {reject(err)})
                 .catch(error => {
@@ -247,7 +248,7 @@ var handleAnswer = (sdp: string, rtcPeerConnection: RTCPeerConnection): Promise<
 const poll = (rtcPeerConnection: RTCPeerConnection, uri: string, myId: string, exitPoll: boolean) => {
     setTimeout(() => {
         // axios.get(inputUri.value+'/data/'+inputMyId.value).then((res) => {
-        communication.get(inputUri.value+'/data/'+inputMyId.value, encryption, key).then((res) => {
+        communication.get(inputUri.value+'/data/'+inputMyId.value, encryption, key, iv).then((res) => {
                 switch(res.data.MessageType){
                     case SDP_TYPE.OFFER:
                         handleOffer(res.data.Data, rtcPeerConnection, inputUri.value, inputPeerId.value)
@@ -301,7 +302,7 @@ function onIceCandidate(event) {
                 event.candidate.sdpMLineIndex,
                 event.candidate.sdpMid].join(ICE_SEPARATOR_CHAR),
             IceDataSeparator: ICE_SEPARATOR_CHAR
-        }, encryption, key)
+        }, encryption, key, iv)
     }
 }
 
