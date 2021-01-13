@@ -48,8 +48,8 @@ var remoteVideoSource: MediaStream;
 // TODO remove these two variables below
 var exitPoll = false;
 var encryption = true;
-var key = 'This is a test key'
-var iv = 'This is a test IV'
+var key = 'aFdtWXEzdDZ3OXokQyZGKQ==';
+var iv = 'RShIK01iUWVTaFZtWXEzdA==';
 
 // variables
 // needed some defaults
