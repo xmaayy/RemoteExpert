@@ -6,8 +6,8 @@ export const post = (uri: string, rawData: Object, encryption: boolean = false, 
     let data;
     if (encryption) {
         data = {
-            cipher: encrypt(rawData, key, iv),
-            hmac: sign(rawData, key)
+            Cipher: encrypt(rawData, key, iv),
+            Hmac: sign(rawData, key)
         }
     } else {
         data = rawData;
@@ -21,8 +21,8 @@ export const get = (uri, decryption: boolean = false, key: string = '', iv: stri
         axios.get(uri).then((response) => {
             const rawData = response.data;
             if(decryption) {
-                const cipher = decrypt(rawData['cipher'], key, iv)
-                const hmac = rawData['hmac'];
+                const cipher = decrypt(rawData['Cipher'], key, iv)
+                const hmac = rawData['Hmac'];
                 if (verify(cipher, hmac, key)){
                     response.data = cipher;
                 } else {
