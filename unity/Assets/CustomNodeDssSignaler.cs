@@ -16,8 +16,8 @@ namespace Microsoft.MixedReality.WebRTC.Unity
     [AddComponentMenu("MixedReality-WebRTC/NodeDSS Signaler")]
     public class CustomNodeDssSignaler : Signaler
     {
-        public string HexKey;
-        public string HexIV;
+        public string Base64Key;
+        public string Base64IV;
         private byte[] Key {get; set;}
         private byte[] IV {get; set;}
         public bool Encrypt = false;
@@ -216,26 +216,6 @@ namespace Microsoft.MixedReality.WebRTC.Unity
             return tcs.Task;
         }
 
-        private byte[] HexStringToBytes(string hex, int expectedLength){
-            // start with a 128 bit array
-            if (hex.Length < expectedLength){
-                throw new ArgumentException("Hex value is too short");
-            }
-            byte[] bytes = new byte[expectedLength/2];
-            for (int i = 0; i < 32; i+=2){
-                bytes[i/2] = (System.Text.Encoding.ASCII.GetBytes(hex.Substring(i, 2)))[0];
-            }
-            print(System.Convert.ToBase64String(bytes));
-            return bytes;
-        }
-
-        private byte[] ASCIIToBytes(string ascii){
-            if (ascii.Length != 16){
-                throw new ArgumentException("ASCII value is needs to be 16 but was " + ascii.Length.ToString());
-            }
-            return System.Text.Encoding.ASCII.GetBytes(ascii);
-        }
-
         private byte[] Base64ToBytes(string base64, int expectedLength){
             if (base64.Length != expectedLength){
                 throw new ArgumentException("Base64 value needs to be" + expectedLength + "but was " + base64.Length.ToString());
@@ -268,15 +248,11 @@ namespace Microsoft.MixedReality.WebRTC.Unity
 
             if (Encrypt){
                 //check for hexKey and hexIV if they are fields 
-                if (HexKey.Length > 0){
-                    this.Key = Base64ToBytes(HexKey, 24);
-                    print(this.Key[0]);
-                    print(this.Key.Length);
+                if (Base64Key.Length > 0){
+                    this.Key = Base64ToBytes(Base64Key, 44);
                 }
-                if (HexIV.Length > 0){
-                    this.IV = Base64ToBytes(HexIV, 24);
-                    print(this.IV[0]);
-                    print(this.IV.Length);
+                if (Base64IV.Length > 0){
+                    this.IV = Base64ToBytes(Base64IV, 24);
                 }
             }
         }
@@ -324,9 +300,6 @@ namespace Microsoft.MixedReality.WebRTC.Unity
                 byte[] cipherBytes = System.Convert.FromBase64String(cipherText);
                 byte[] hmacBytes = System.Convert.FromBase64String(hmac);
                 var jsonPlainText = AES.DecryptStringFromBytes_Aes(cipherBytes, Key, IV);
-                print(jsonPlainText);
-                print(hmac);
-                print(Key);
                 if (HMAC.Verify(Key, jsonPlainText, hmacBytes)){
                     NodeDssMessage nodeMessage = JsonUtility.FromJson<NodeDssMessage>(jsonPlainText);
                     return nodeMessage;
@@ -374,7 +347,6 @@ namespace Microsoft.MixedReality.WebRTC.Unity
                 NodeDssMessage msg;
 
                 if (Encrypt){
-                    print(json);
                     EncryptedMessage encryptedMessage = JsonUtility.FromJson<EncryptedMessage>(json);
                     msg = EncryptedMessage.DecryptMessage(encryptedMessage.Cipher, encryptedMessage.Hmac, this.Key, this.IV);
                 } else {
@@ -440,11 +412,17 @@ namespace Microsoft.MixedReality.WebRTC.Unity
             lastGetComplete = true;
         }
 
+        private void OnEnable()
+        {
+            print("Enabled the Signaler");
+        }
+
         /// <inheritdoc/>
         protected override void Update()
         {
             // Do not forget to call the base class Update(), which processes events from background
             // threads to fire the callbacks implemented in this class.
+            print("updating");
             base.Update();
 
             // If we have not reached our PollTimeMs value...
