@@ -9,6 +9,8 @@ namespace com.RemoteExpert
         public class MarkerInstance {
             public GameObject GameObject;
             private Vector3 Location;
+
+            private Color color;
             public Guid id;
 
             public MarkerInstance (GameObject gameObject, Vector3 location){
@@ -16,6 +18,19 @@ namespace com.RemoteExpert
                 Location = location;
 
                 id = Guid.NewGuid();
+
+                color = getRandomColor();
+                setColor(gameObject, color);
+            }
+
+            private Color getRandomColor() {
+                System.Random rnd = new System.Random();
+                return new Color32(Convert.ToByte(rnd.Next(256)), Convert.ToByte(rnd.Next(256)), Convert.ToByte(rnd.Next(256)), 255);
+            }
+
+            private void setColor(GameObject gameObject, Color color){
+                var renderer = gameObject.GetComponent<Renderer>();
+                renderer.material.SetColor("_Color", color);
             }
 
             public void SetLocation (Vector3 location){
@@ -30,18 +45,16 @@ namespace com.RemoteExpert
             public LayerMask LayerMask;
             public float MaxDistance;
             public Dictionary<Guid, MarkerInstance> Instances = new Dictionary<Guid, MarkerInstance>();
+            public Dictionary<Guid, GameObject> Prefabs = new Dictionary<Guid, GameObject>();
 
             public float[] InputCoordinates;
             private Raycaster raycaster = new Raycaster();
-            public Guid place(){
+            public void place(){
                 if (Prefab != null){
                     RaycastHit hit = raycaster.getHit(InputCoordinates, LayerMask, MaxDistance);
                     GameObject gameObject = Instantiate(Prefab, hit.point, Quaternion.identity);
                     MarkerInstance instance = new MarkerInstance(gameObject, hit.point);
                     Instances[instance.id] = instance;
-                    return instance.id;
-                } else {
-                    throw new KeyNotFoundException("Could not properly create");
                 }
             }
 

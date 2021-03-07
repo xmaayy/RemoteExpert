@@ -2,17 +2,17 @@
   "scopedRegistries": [
     {
       "name": "Microsoft Mixed Reality",
+      "url": "https://pkgs.dev.azure.com/aipmr/MixedReality-Unity-Packages/_packaging/Unity-packages/npm/registry/",
       "scopes": [
         "com.microsoft.mixedreality"
-      ],
-      "url": "https:\/\/pkgs.dev.azure.com\/aipmr\/MixedReality-Unity-Packages\/_packaging\/Unity-packages\/npm\/registry\/"
+      ]
     },
     {
       "name": "MS Build for Unity",
+      "url": "https://pkgs.dev.azure.com/UnityDeveloperTools/MSBuildForUnity/_packaging/UnityDeveloperTools/npm/registry",
       "scopes": [
         "com.microsoft"
-      ],
-      "url": "https:\/\/pkgs.dev.azure.com\/UnityDeveloperTools\/MSBuildForUnity\/_packaging\/UnityDeveloperTools\/npm\/registry"
+      ]
     }
   ],
   "dependencies": {
@@ -58,12 +58,6 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0",
-    "com.microsoft.mixedreality.toolkit.examples": "file:MixedReality\/com.microsoft.mixedreality.toolkit.examples-2.5.4.tgz",
-    "com.microsoft.mixedreality.toolkit.extensions": "file:MixedReality\/com.microsoft.mixedreality.toolkit.extensions-2.5.4.tgz",
-    "com.microsoft.mixedreality.toolkit.foundation": "file:MixedReality\/com.microsoft.mixedreality.toolkit.foundation-2.5.4.tgz",
-    "com.microsoft.mixedreality.toolkit.planefinding": "file:MixedReality\/com.microsoft.mixedreality.toolkit.planefinding-1.0.0.tgz",
-    "com.microsoft.mixedreality.toolkit.standardassets": "file:MixedReality\/com.microsoft.mixedreality.toolkit.standardassets-2.5.4.tgz",
-    "com.microsoft.mixedreality.toolkit.tools": "file:MixedReality\/com.microsoft.mixedreality.toolkit.tools-2.5.4.tgz"
+    "com.unity.modules.xr": "1.0.0"
   }
 }
