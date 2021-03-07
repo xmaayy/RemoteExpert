@@ -49,10 +49,10 @@ namespace com.RemoteExpert
 
             public float[] InputCoordinates;
             private Raycaster raycaster = new Raycaster();
-            public void place(){
+            public void place(GameObject prefab, float[] inputCoordinates){
                 if (Prefab != null){
-                    RaycastHit hit = raycaster.getHit(InputCoordinates, LayerMask, MaxDistance);
-                    GameObject gameObject = Instantiate(Prefab, hit.point, Quaternion.identity);
+                    RaycastHit hit = raycaster.getHit(inputCoordinates, LayerMask, MaxDistance);
+                    GameObject gameObject = Instantiate(prefab, hit.point, Quaternion.identity);
                     MarkerInstance instance = new MarkerInstance(gameObject, hit.point);
                     Instances[instance.id] = instance;
                 }
@@ -95,7 +95,7 @@ namespace com.RemoteExpert
 
             /// <inheritdoc/>
             public void OnPointerClicked(MixedRealityPointerEventData eventData) {
-                place();
+                place(Prefab, InputCoordinates);
             }
             /// <inheritdoc/>
             public void OnPointerDown(MixedRealityPointerEventData eventData) { }
