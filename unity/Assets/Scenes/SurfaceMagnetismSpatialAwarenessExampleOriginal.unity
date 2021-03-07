@@ -901,7 +901,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2a0ae1c0ab0a8b4baf6226461b7ab5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SolverPrefab: {fileID: 0}
+  Prefab: {fileID: 0}
+  LayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  MaxDistance: 0
   InputCoordinates:
   - 1
   - 1
@@ -935,11 +939,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2a0ae1c0ab0a8b4baf6226461b7ab5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SolverPrefab: {fileID: 469976522506268564, guid: b46daf3cd53712944a1dbd93545ac2e5,
-    type: 3}
+  Prefab: {fileID: 3835848982030527020, guid: 2f20d81a47e083b41ac0f0a5f26c4840, type: 3}
+  LayerMask:
+    serializedVersion: 2
+    m_Bits: 2147483648
+  MaxDistance: 50
   InputCoordinates:
-  - 0.1
-  - 0.1
+  - 0.5
+  - 0.5
   - 0
 --- !u!4 &1231889948
 Transform:
