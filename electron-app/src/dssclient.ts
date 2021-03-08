@@ -7,6 +7,7 @@ you're reading the code
 */
 import axios from 'axios';
 import * as communication from './communication';
+import * as ZXing from '@zxing/library';
 
 // The Hololens application uses Enum values corresponding to integers to represent the sdp message types
 const SDP_TYPE = {
@@ -45,6 +46,42 @@ const localVideo = (<HTMLMediaElement>window.document.getElementById("localVideo
 localVideo.muted = true;
 const remoteVideo = (<HTMLMediaElement>window.document.getElementById("remoteVideo"));
 var remoteVideoSource: MediaStream;
+
+remoteVideo.onclick = function clickEvent(e: MouseEvent) {
+    // e = Mouse click event.
+    // This cast shouldnt be necesary but TypeScript doesnt understand
+    // the normal use case here https://github.com/facebook/react/issues/16201
+    const node = e.target as HTMLElement;
+    var rect = node.getBoundingClientRect();
+    var x = e.clientX - rect.left; //x position within the element.
+    var y = e.clientY - rect.top;  //y position within the element.
+    console.log("Left? : " + x + " ; Top? : " + y + ".");
+
+    // These coords are distance from the top left corner of the
+    // bounding rect around the video feed. 
+    const scaledCoords = {
+        x : x/rect.width,
+        y : y/rect.height
+    }
+    sendMessage(JSON.stringify(scaledCoords));
+};
+
+// IDK IF we want to dynamically allocate these or just constant
+// for now to make it easier during dev (saving a QR code and testign
+// under different conditions instead of having to get a new one each
+// time)
+var input = {
+    "ip": "127.0.0.1",
+    "peerId": "mattiasLightstone",
+    "iv": "7538782F413F4428472B4B6150645367",
+    "key": "5A7234753778214125442A472D4B614E"
+};
+
+// Render it directly to DOM as an SVG
+const writer = new ZXing.BrowserQRCodeSvgWriter();
+const svgElement = writer.write(JSON.stringify(input), 300, 300);
+document.getElementById("mySVG")!.appendChild(svgElement);
+
 // TODO remove these two variables below
 var exitPoll = false;
 var encryption = true;
@@ -60,6 +97,10 @@ const iceServers: RTCConfiguration = {
 }
 const streamConstraints = { audio: true, video: true };
 // but realistically it could be anywhere
+
+// Any data sent through here will be available on the other
+// end.
+var sendChannel: RTCDataChannel;
 
 // attaching the join-room function to the button on the page
 btnCreateOffer.onclick = function () {
@@ -111,6 +152,15 @@ const initializeRtc = (iceServers: RTCConfiguration): RTCPeerConnection => {
     const rtcPeerConnection = new RTCPeerConnection(iceServers);
     rtcPeerConnection.onicecandidate = onIceCandidate;
     rtcPeerConnection.ontrack = onAddStream;
+
+    // Each end calls this when a new channel is created.
+    rtcPeerConnection.ondatachannel = receiveChannelCallback;
+
+    // Create a channel that we aptly call sendChannel for transmitting data
+    // between the two ends
+    sendChannel = rtcPeerConnection.createDataChannel("sendChannel");
+    sendChannel.onopen = handleSendChannelStatusChange;
+    sendChannel.onclose = handleSendChannelStatusChange;
     return rtcPeerConnection
 }
 
@@ -267,3 +317,46 @@ function onAddStream(event) {
         remoteVideo.srcObject = remoteVideoSource;
     }
 }
+
+function handleReceiveMessage(event) {
+    // This is the callback that gets run every time a new event
+    // is made avaiable by the data channel
+    console.log(event.data);
+}
+
+function receiveChannelCallback(event) {
+    // If we detect that someone else made a data channel then here
+    // is where we register the callback that allows us to handle data
+    var receiveChannel = event.channel;
+    receiveChannel.onmessage = handleReceiveMessage;
+    receiveChannel.onopen = handleReceiveChannelStatusChange;
+    receiveChannel.onclose = handleReceiveChannelStatusChange;
+}
+
+function sendMessage(message: string) {
+    // Ezpz method for sending data. There are 3 other versions
+    // for sending non-string data, but all this one does is send
+    // string data
+    sendChannel.send(message);
+}
+
+function handleSendChannelStatusChange(event) {
+    // If for some reason the other end closes the channel we can
+    // alert the operator here
+    if (event.channel) {
+      var state = event.channel.readyState;
+      if (state === "open") {
+        console.log("The state of the data channel is open")
+      } else {
+        console.log("The state of the data channel is closed")
+      }
+    }
+  }
+
+function handleReceiveChannelStatusChange(event: RTCDataChannelEvent) {
+    // Shrug
+    if (event.channel) {
+      console.log("Receive channel's status has changed to " +
+        event.channel.readyState);
+    }
+  }
