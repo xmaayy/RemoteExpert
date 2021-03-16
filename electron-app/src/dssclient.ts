@@ -66,27 +66,27 @@ remoteVideo.onclick = function clickEvent(e: MouseEvent) {
     sendMessage(JSON.stringify(scaledCoords));
 };
 
+// TODO remove these two variables below
+var exitPoll = false;
+var encryption = false;
+var key = 'SPI6ZRQehawswqxYSvWhSsMFod8hlJ+4Zfw8VHgyY64=';
+var iv = 'bjdnbK4WYt1Ly0LBK6eYq8==';
+
 // IDK IF we want to dynamically allocate these or just constant
 // for now to make it easier during dev (saving a QR code and testign
 // under different conditions instead of having to get a new one each
 // time)
 var input = {
-    "ip": "127.0.0.1",
-    "peerId": "mattiasLightstone",
-    "iv": "7538782F413F4428472B4B6150645367",
-    "key": "5A7234753778214125442A472D4B614E"
+    "ip": "http://127.0.0.1:3000/",
+    "id": "mattiasLightstone",
+    "iv": iv,
+    "key": key
 };
 
 // Render it directly to DOM as an SVG
 const writer = new ZXing.BrowserQRCodeSvgWriter();
 const svgElement = writer.write(JSON.stringify(input), 300, 300);
 document.getElementById("mySVG")!.appendChild(svgElement);
-
-// TODO remove these two variables below
-var exitPoll = false;
-var encryption = true;
-var key = 'aFdtWXEzdDZ3OXokQyZGKQ==';
-var iv = 'RShIK01iUWVTaFZtWXEzdA==';
 
 // variables
 // needed some defaults
@@ -159,6 +159,7 @@ const initializeRtc = (iceServers: RTCConfiguration): RTCPeerConnection => {
 
     // Create a channel that we aptly call sendChannel for transmitting data
     // between the two ends
+    console.log('create data channel')
     sendChannel = rtcPeerConnection.createDataChannel("sendChannel");
     sendChannel.onopen = handleSendChannelStatusChange;
     sendChannel.onclose = handleSendChannelStatusChange;

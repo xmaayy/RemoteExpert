@@ -3,6 +3,8 @@ using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit;
 using System.Collections.Generic;
 using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace com.RemoteExpert
 {
@@ -49,8 +51,11 @@ namespace com.RemoteExpert
 
             public float[] InputCoordinates;
             private Raycaster raycaster = new Raycaster();
-            public void place(GameObject prefab, float[] inputCoordinates){
-                if (Prefab != null){
+            public void place(float[] inputCoordinates, GameObject prefab = null){
+                if (prefab == null) {
+                    prefab = Prefab;
+                }
+                if (prefab != null){
                     RaycastHit hit = raycaster.getHit(inputCoordinates, LayerMask, MaxDistance);
                     GameObject gameObject = Instantiate(prefab, hit.point, Quaternion.identity);
                     MarkerInstance instance = new MarkerInstance(gameObject, hit.point);
@@ -95,7 +100,7 @@ namespace com.RemoteExpert
 
             /// <inheritdoc/>
             public void OnPointerClicked(MixedRealityPointerEventData eventData) {
-                place(Prefab, InputCoordinates);
+                place(InputCoordinates, Prefab);
             }
             /// <inheritdoc/>
             public void OnPointerDown(MixedRealityPointerEventData eventData) { }
@@ -105,6 +110,17 @@ namespace com.RemoteExpert
 
             /// <inheritdoc/>
             public void OnPointerUp(MixedRealityPointerEventData eventData) { }
+
+            public void coordinateMessage(string value){
+
+                var coords = JObject.Parse(value);
+
+                float x = coords["x"].Value<float>();
+                float y = coords["y"].Value<float>();
+
+                float[] inputCoordinates = {x, y};
+                place(inputCoordinates);
+            }
 
         }
 }

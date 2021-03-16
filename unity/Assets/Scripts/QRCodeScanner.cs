@@ -96,19 +96,19 @@ public class QRCodeScanner : MonoBehaviour
                     // camTexture.Stop();
                     // qrThread.Abort();
 
-                    GameObject signaler = new GameObject("signaler", typeof(CustomNodeDssSignaler));
+                    // CustomNodeDssSignaler signalerScript = signaler.GetComponent(typeof(CustomNodeDssSignaler)) as CustomNodeDssSignaler;
 
-                    CustomNodeDssSignaler signalerScript = signaler.GetComponent(typeof(CustomNodeDssSignaler)) as CustomNodeDssSignaler;
-
-                    signalerScript.PeerConnection = PC;
-                    signalerScript.Base64Key = message.key;
-                    signalerScript.Base64IV = message.iv;
-                    signalerScript.HttpServerAddress = message.ip;
-                    signalerScript.RemotePeerId = message.id;
-                    signalerScript.LocalPeerId = "HoloLens";
-                    signalerScript.Encrypt = true;
+                    signaler.PeerConnection = PC;
+                    signaler.Base64Key = message.key;
+                    signaler.Base64IV = message.iv;
+                    signaler.HttpServerAddress = message.ip;
+                    signaler.RemotePeerId = message.id;
+                    signaler.LocalPeerId = "HoloLens";
+                    signaler.Encrypt = true;
                     // if there is a signaler attached, it should grab the signaller now
                     LocalMedia.SetActive(true);
+                    signaler.gameObject.SetActive(true);
+                    signaler.PeerConnection.StartConnection();
                     gameObject.SetActive(false);
                 }
             } catch (System.ArgumentException e){

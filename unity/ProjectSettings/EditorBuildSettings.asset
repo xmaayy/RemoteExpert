@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/VideoChatDemo.unity
+    path: Assets/Scenes/VideoChatting.unity
     guid: feed99ae0a5fc914883b24ee78abf9d6
   m_configObjects:
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: cdf99d3fd47d75e4cb4f034ba233b340,
