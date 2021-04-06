@@ -104,7 +104,6 @@ public class QRCodeScanner : MonoBehaviour
                     signaler.HttpServerAddress = message.ip;
                     signaler.RemotePeerId = message.id;
                     signaler.LocalPeerId = "HoloLens";
-                    signaler.Encrypt = true;
                     // if there is a signaler attached, it should grab the signaller now
                     LocalMedia.SetActive(true);
                     signaler.gameObject.SetActive(true);

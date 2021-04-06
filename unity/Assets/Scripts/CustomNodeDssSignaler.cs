@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -21,6 +22,7 @@ namespace Microsoft.MixedReality.WebRTC.Unity
         /// </summary>
         [Tooltip("Automatically log all errors to the Unity console")]
         public RestModel Rest;
+        public ConfigConverter config;
         /// <summary>
         /// Automatically log all errors to the Unity console.
         /// </summary>
@@ -56,6 +58,7 @@ namespace Microsoft.MixedReality.WebRTC.Unity
         private byte[] Key {get; set;}
         private byte[] IV {get; set;}
         public bool Encrypt = false;
+        private List<string> messages = new List<String>();
 
         /// <summary>
         /// Message exchanged with a <c>node-dss</c> server, serialized as JSON.
@@ -438,6 +441,11 @@ namespace Microsoft.MixedReality.WebRTC.Unity
             {
                 return;
             }
+            if (messages.Count > 0){
+                // Rest.coordinateMessage(messages[0]);
+                config.Router.route(messages[0]);
+                messages.RemoveAt(0);
+            }
 
             // When we have reached our PollTimeMs value...
             timeSincePollMs = 0f;
@@ -454,9 +462,10 @@ namespace Microsoft.MixedReality.WebRTC.Unity
             channel.MessageReceived += OnMessageReceived;
         }
 
+
         private void OnMessageReceived(byte[] message) {
             string text = System.Text.Encoding.UTF8.GetString(message);
-            Rest.coordinateMessage(text);
+            messages.Add(text);
         }
 
         private void DebugLogLong(string str)

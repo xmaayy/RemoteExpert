@@ -3,9 +3,7 @@ using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit;
 using System.Collections.Generic;
 using System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
+using Newtonsoft.Json.Linq; 
 namespace com.RemoteExpert
 {
         public class MarkerInstance {
@@ -44,6 +42,7 @@ namespace com.RemoteExpert
         public class RestModel: MonoBehaviour, IMixedRealityPointerHandler {
 
             public GameObject Prefab;
+            public Camera ViewCamera;
             public LayerMask LayerMask;
             public float MaxDistance;
             public Dictionary<Guid, MarkerInstance> Instances = new Dictionary<Guid, MarkerInstance>();
@@ -51,12 +50,32 @@ namespace com.RemoteExpert
 
             public float[] InputCoordinates;
             private Raycaster raycaster = new Raycaster();
+
+            public string getAll(string resourceName){
+                return "Get All not implemented";
+            }
+            public string get(string resourceName, Guid id){
+                return "Get not implemented";
+            }
+
+            public string post(string resourceName, string body, GameObject prefab){
+                return "Post not implemented";
+            }
+
+            public string put(string resourceName, Guid id, string body){
+                return "Put not implemented";
+            }
+
+            public string delete(string resourceName, Guid id){
+                return "Delete not implemented";
+            }
             public void place(float[] inputCoordinates, GameObject prefab = null){
                 if (prefab == null) {
                     prefab = Prefab;
                 }
+
                 if (prefab != null){
-                    RaycastHit hit = raycaster.getHit(inputCoordinates, LayerMask, MaxDistance);
+                    RaycastHit hit = raycaster.getHit(inputCoordinates, LayerMask, MaxDistance, ViewCamera);
                     GameObject gameObject = Instantiate(prefab, hit.point, Quaternion.identity);
                     MarkerInstance instance = new MarkerInstance(gameObject, hit.point);
                     Instances[instance.id] = instance;
@@ -80,7 +99,7 @@ namespace com.RemoteExpert
             }
 
             public MarkerInstance raycastMove(Guid id, float[] inputCoordinates){
-                RaycastHit hit = raycaster.getHit(inputCoordinates, LayerMask, MaxDistance);
+                RaycastHit hit = raycaster.getHit(inputCoordinates, LayerMask, MaxDistance, ViewCamera);
 
                 return move(id, hit.point);
             }
