@@ -16,16 +16,17 @@ namespace com.RemoteExpert{
         }
         private void Awake()
         {
-            string path = Application.dataPath +  "/config.json";
+            string path = Application.dataPath +  "/Resources/config.json";
             // Read the file from the current directory
-            string configuration = System.IO.File.ReadAllText(path);
+            string conf = System.IO.File.ReadAllText(path);
+            // print(configuration);
             // Parse the object into JSON
             // Read the configuration file in the resources directory
             // var configJson = Resources.Load<TextAsset>("config.json");
             // string configuration = configJson.ToString();
             // Parse the object into JSON
-            JObject configObject = JObject.Parse(configuration);
-            JToken restConfigTokens = configObject["Rest"];
+            JObject configObject = JObject.Parse(conf);
+            JToken restConfigTokens = configObject["rest"];
             JToken customConfigTokens = configObject["customHandlers"];
 
             List<RestConfig> restConfigs = new List<RestConfig>();
@@ -95,7 +96,7 @@ namespace com.RemoteExpert{
 
         public Config (JToken config) {
             this.name = config["name"].Value<string>();
-            this.verbs = config["verbs"].Value<string[]>();
+            this.verbs = config["verbs"].ToObject<string[]>();
             this.handler = config["handler"].Value<string>();
         }
     }
@@ -109,7 +110,7 @@ namespace com.RemoteExpert{
         public RestConfig(JToken config){
             this.name = config["name"].Value<string>();
             this.prefab = config["prefab"].Value<string>();
-            this.verbs = config["verbs"].Value<string[]>();
+            this.verbs = config["verbs"].ToObject<string []>();
             // Attribute control can be added in future iterations
             // this.attributes = config["attributes"].ToString();
         }

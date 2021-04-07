@@ -20,4 +20,4 @@ MonoBehaviour:
     componentName: Spatial Object Mesh Observer
     priority: 0
     runtimePlatform: 208
-    observerProfile: {fileID: 11400000, guid: 141c98b55eab8ca4498552deff95b6f4, type: 2}
+    observerProfile: {fileID: 11400000, guid: f8a7fa586f25e594b94edecc90f8450b, type: 2}

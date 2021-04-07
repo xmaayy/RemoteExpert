@@ -22,7 +22,7 @@ namespace Microsoft.MixedReality.WebRTC.Unity
         /// </summary>
         [Tooltip("Automatically log all errors to the Unity console")]
         public RestModel Rest;
-        public ConfigConverter config;
+        public ConfigConverter Config;
         /// <summary>
         /// Automatically log all errors to the Unity console.
         /// </summary>
@@ -443,7 +443,8 @@ namespace Microsoft.MixedReality.WebRTC.Unity
             }
             if (messages.Count > 0){
                 // Rest.coordinateMessage(messages[0]);
-                config.Router.route(messages[0]);
+                Router router = this.Config.Router;
+                router.route(messages[0]);
                 messages.RemoveAt(0);
             }
 
