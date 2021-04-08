@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "iE1Mua5hR5k2ZSIMkkXA8e3EmDYVAzipQxsKoQhBPGGZVQUpioqrm6X4IvXoVGrDMcH7G0/JGgbz/U4qriWMvA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\matt1\\Documents\\capstone\\RemoteExpert\\unity\\Assets\\WebRTC.Dependencies.msb4u.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\matt1\\.nuget\\packages\\msbuildforunity\\0.9.1-123842\\msbuildforunity.0.9.1-123842.nupkg.sha512"
+  ],
+  "logs": []
+}

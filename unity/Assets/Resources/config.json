@@ -1,0 +1,14 @@
+{
+    "rest": [{
+        "name": "water", 
+        "prefab": "H20.obj", 
+        "verbs": ["get", "post", "patch", "delete"],
+        "attributes": {
+            "location": "float[]",
+            "scale": "float[]",
+            "color": "float[]"
+        }
+    }],
+    "customHandlers": []
+
+}
