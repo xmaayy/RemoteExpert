@@ -12,8 +12,8 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
-  productName: WebRTC
+  companyName: Remote Expert
+  productName: Remote Expert
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -159,7 +159,7 @@ PlayerSettings:
       protectedContext: 0
       v2Signing: 1
     enable360StereoCapture: 0
-  isWsaHolographicRemotingEnabled: 0
+  isWsaHolographicRemotingEnabled: 1
   enableFrameTimingStats: 0
   useHDRDisplay: 0
   D3DHDRBitDepth: 0
@@ -598,10 +598,15 @@ PlayerSettings:
   metroCertificateIssuer: DefaultCompany
   metroCertificateNotAfter: 006f9b6e98fbd701
   metroApplicationDescription: Template_3D
-  wsaImages: {}
-  metroTileShortName: 
+  wsaImages:
+    65636: Assets/RemoteExpert/Logos/logo_50.jpg
+    65661: Assets/RemoteExpert/Logos/logo_63.jpg
+    65686: Assets/RemoteExpert/Logos/logo_75.jpg
+    65736: Assets/RemoteExpert/Logos/logo_100.jpg
+    65936: Assets/RemoteExpert/Logos/logo_200.jpg
+  metroTileShortName: Remote Expert
   metroTileShowName: 0
-  metroMediumTileShowName: 0
+  metroMediumTileShowName: 1
   metroLargeTileShowName: 0
   metroWideTileShowName: 0
   metroSupportStreamingInstall: 0

@@ -1,13 +1,8 @@
 {
     "rest": [{
-        "name": "water", 
-        "prefab": "H20.obj", 
-        "verbs": ["get", "post", "patch", "delete"],
-        "attributes": {
-            "location": "float[]",
-            "scale": "float[]",
-            "color": "float[]"
-        }
+        "name": "cube", 
+        "prefab": "Cube.unity", 
+        "verbs": ["get", "post", "patch", "delete"]
     }],
     "customHandlers": []
 

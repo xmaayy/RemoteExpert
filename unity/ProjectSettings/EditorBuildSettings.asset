@@ -8,12 +8,18 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: Assets/Scenes/Production.unity
-    guid: 1cf3bf2b5f04d6b4380c982b26149502
   - enabled: 1
-    path: Assets/Scenes/SurfaceMagnetismSpatialAwarenessExampleOriginal - Copy.unity
-    guid: 8d947d43b3d85f4458e57cf61038dce0
+    path: Assets/RemoteExpert/Scenes/RemoteExpertTemplate.unity
+    guid: 1cf3bf2b5f04d6b4380c982b26149502
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   m_configObjects:
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: cdf99d3fd47d75e4cb4f034ba233b340,
       type: 2}

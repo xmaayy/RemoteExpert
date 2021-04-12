@@ -50,7 +50,7 @@ namespace com.RemoteExpert{
 
     }
 
-    public class Router : MonoBehaviour
+    public class Router
     {
         // fed in a series of handlers, and 
         public Dictionary<string, Handler> Routes = new Dictionary<string, Handler>();
@@ -116,10 +116,10 @@ namespace com.RemoteExpert{
         }
     }
 
-    public abstract class Handler : MonoBehaviour
+    public abstract class Handler
     {
         public Handler(){}
-        public string handle (JObject message){
+        public virtual string handle (JObject message){
             return "Handle method not implemented";
         }
     }
@@ -139,16 +139,24 @@ namespace com.RemoteExpert{
             this.PrefabFileName = prefabFileName;
         }
 
-        public void Awake() {
-            GameObject prefab = Resources.Load("Prefabs/" + this.PrefabFileName) as GameObject;
-            this.Prefab = prefab;
-        }
+        public override string handle (JObject message){
+            string method = "";
+            string name = "";
+            string body = "";
+            string id = "";
 
-        public string handle (JObject message){
-            string method = message["method"].Value<string>();
-            string name = message["name"].Value<string>();
-            string body = message["body"].ToString();
-            string id = message["id"].Value<string>();
+            try{
+                method = message["verb"].Value<string>();
+            } catch (ArgumentNullException e){}
+            try{
+                name = message["name"].Value<string>();
+            } catch (ArgumentNullException e){}
+            try{
+                body = message["body"].ToString();
+            } catch (ArgumentNullException e){}
+            try{
+                id = message["id"].Value<string>();
+            } catch (ArgumentNullException e){}
 
             if (!Array.Exists(this.Verbs, verb => verb == method )){
                 return "Not a valid request";
@@ -159,7 +167,7 @@ namespace com.RemoteExpert{
             }
 
             if (method == "post"){
-                return this.Model.post(name, body, this.Prefab);
+                return this.Model.post(name, body, this.PrefabFileName);
             }
 
             if (id == ""){
