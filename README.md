@@ -41,7 +41,7 @@ Select "Device" "x86" and Click the Run button
 
 # Run the Example Application
 ## Run the Signalling server
-```cd node-dss-signaler```
+```cd signaling-server```
 ```npm run start```
 ## Run the electron application
 ```cd electron```
