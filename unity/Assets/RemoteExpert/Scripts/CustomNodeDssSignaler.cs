@@ -444,8 +444,12 @@ namespace Microsoft.MixedReality.WebRTC.Unity
             if (messages.Count > 0){
                 // Rest.coordinateMessage(messages[0]);
                 Router router = this.Config.Router;
-                router.route(messages[0]);
-                messages.RemoveAt(0);
+                if (router == null){
+                    print("Router is not yet initialized, waiting to handle request");
+                } else {
+                    router.route(messages[0]);
+                    messages.RemoveAt(0);
+                }
             }
 
             // When we have reached our PollTimeMs value...

@@ -50,7 +50,7 @@ namespace com.RemoteExpert{
 
     }
 
-    public class Router : MonoBehaviour
+    public class Router
     {
         // fed in a series of handlers, and 
         public Dictionary<string, Handler> Routes = new Dictionary<string, Handler>();

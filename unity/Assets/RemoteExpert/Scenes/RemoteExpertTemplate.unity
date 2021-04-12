@@ -304,7 +304,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6933519bc25ed7b4d8e6110ce103adb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Router: {fileID: 0}
   Model: {fileID: 1231889947}
 --- !u!4 &218543600
 Transform:
@@ -948,7 +947,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PeerConnection: {fileID: 1616100640}
   Rest: {fileID: 1231889947}
-  Config: {fileID: 0}
+  Config: {fileID: 218543599}
   AutoLogErrors: 1
   LocalPeerId: HoloLens
   RemotePeerId: mattiaslightstone
@@ -1370,7 +1369,7 @@ MonoBehaviour:
   smoothing: 1
   lifetime: 0
   orientationType: 0
-  localOffset: {x: -0.18, y: -0.07, z: 0.2}
+  localOffset: {x: 0.18, y: -0.07, z: 0.2}
   worldOffset: {x: 0, y: 0, z: 0}
   useAngleStepping: 0
   tetherAngleSteps: 6
