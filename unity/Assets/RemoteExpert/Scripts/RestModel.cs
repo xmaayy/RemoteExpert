@@ -58,8 +58,19 @@ namespace com.RemoteExpert
                 return "Get not implemented";
             }
 
-            public string post(string resourceName, string body, GameObject prefab){
-                return "Post not implemented";
+            public string post(string resourceName, string body, string prefabFilename){
+                GameObject prefab = Resources.Load("Prefabs/" + prefabFilename) as GameObject;
+                // return "Post not implemented";
+                // Convert the body to a navigable object
+                JObject bodyJson = JObject.Parse(body);
+
+                float x = bodyJson["x"].Value<float>();
+                float y = bodyJson["y"].Value<float>();
+
+                float[] inputCoordinates = {x, y};
+
+                this.place(inputCoordinates, prefab);
+                return "Object succesfully placed";
             }
 
             public string put(string resourceName, Guid id, string body){
