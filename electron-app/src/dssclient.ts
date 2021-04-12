@@ -68,15 +68,15 @@ remoteVideo.onclick = function clickEvent(e: MouseEvent) {
     // These coords are distance from the top left corner of the
     // bounding rect around the video feed. 
     // Now we construct a post request using the coordinates
-    // const request = {
-    //     name: "cube",
-    //     verb: "post",
-    //     body: {
-    //         x : x/rect.width,
-    //         y : y/rect.height
-    //     }
-    // }
-    // connection.sendMessage(JSON.stringify(request));
+    const request = {
+        name: "cube",
+        verb: "post",
+        body: {
+            x : x/rect.width,
+            y : (1 - y/rect.height)
+        }
+    }
+    connection.sendMessage(JSON.stringify(request));
 };
 
 var key = 'SPI6ZRQehawswqxYSvWhSsMFod8hlJ+4Zfw8VHgyY64=';
